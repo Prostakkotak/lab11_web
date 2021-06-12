@@ -80,6 +80,10 @@ export default {
   z-index: 1000;
 }
 
+.dark-theme .form-section {
+    background-color: transparent;
+}
+
 .todo-add {
   position: relative;
   display: flex;
@@ -99,9 +103,9 @@ export default {
   position: absolute;
   top: 10px;
   right: 10px;
-  border: 1px solid #f05454;
+  border: 1px solid var(--main-color-1);
   border-radius: 5px;
-  color: #f05454;
+  color: var(--main-color-1);
   background-color: transparent;
   font-size: 16px;
   text-align: center;
@@ -110,7 +114,7 @@ export default {
 
 .todo-add__close:hover {
   color: #fff;
-  background-color: #f05454;
+  background-color: var(--main-color-1);
   transition: 200ms;
   cursor: pointer;
 }
@@ -135,7 +139,7 @@ export default {
 }
 
 .todo-add__input:focus {
-  background-color: rgba(240, 84, 84, 0.1);
+  background-color: rgba(21, 97, 109, .1);
   outline: 0;
   transition: 200ms;
 }
@@ -146,7 +150,7 @@ export default {
   box-sizing: border-box;
   padding: 10px;
   text-transform: uppercase;
-  background-color: #f05454;
+  background-color: var(--main-color-1);
   color: #fff;
   font-size: 17px;
   transition: 200ms;

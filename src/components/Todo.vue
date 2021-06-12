@@ -124,7 +124,7 @@ export default {
 }
 
 .todo-list__button_promote {
-  background-color: #f05454;
+  background-color: var(--main-color-1);
 }
 .todo-list__button_remove {
   background-color: #222831;
