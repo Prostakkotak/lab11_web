@@ -1,12 +1,12 @@
 <template>
   <section
-  tabindex="0"
-    class="form-section"
-    @keyup.esc="$emit('close')"
-    @click.self="$emit('close')"
+    tabindex="0"
+    v-bind:class="{ 'form-section': true, 'form-section_open': modalOpening }"
+    @keyup.esc="closeModal()"
+    @click.self="closeModal()"
   >
     <form @submit.prevent="onSubmit" class="todo-add">
-      <button class="todo-add__close" type="button" @click="$emit('close')">
+      <button class="todo-add__close" type="button" @click="closeModal()">
         X
       </button>
       <label class="todo-add__title" for="name-input">Новая задача</label>
@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  props: ["todos", "showModal"],
+  props: ["todos", "showModal", "modalOpening"],
   methods: {
     onSubmit() {
       if (this.name.trim()) {
@@ -35,26 +35,22 @@ export default {
           status: "backlog",
         };
 
-        if (this.todos.length != 0) {
-          newTodo.id = this.todos[this.todos.length - 1].id + 1;
-        } else {
-          newTodo.id = 0;
-        }
+        this.$store.commit('increaseTodosCounter')
+        newTodo.id = this.$store.state.todosCounter
 
         this.todos.push(newTodo);
         this.name = "";
-        this.closeModal();
+        this.modalOpening = false;
+        setTimeout(() => {
+          this.closeModal();
+        }, 10);
       }
     },
     closeModal() {
-      this.$emit("close");
-    },
-    mounted: function () {
-      document.addEventListener("keydown", (e) => {
-        if (this.show && e.code == 27) {
-          this.$emit("close");
-        }
-      });
+      this.modalOpening = false;
+      setTimeout(() => {
+        this.$emit("close");
+      }, 200);
     },
   },
   data() {
@@ -76,12 +72,34 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.2);
   z-index: 1000;
+  transition: 200ms;
+}
+
+.form-section .todo-add {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.form-section_open {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.form-section_open .todo-add {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .dark-theme .form-section {
-    background-color: transparent;
+  background-color: transparent;
+}
+
+.dark-theme .todo-add {
+  background-color: rgb(226, 222, 222);
+}
+
+.dark-theme .todo-add__input {
+  background-color: rgb(226, 222, 222);
 }
 
 .todo-add {
@@ -93,7 +111,7 @@ export default {
   padding: 50px 100px;
   font-size: 19px;
   border-radius: 5px;
-  background-color: #fff;
+  background-color: #ffffff;
 }
 
 .todo-add__close {
@@ -119,6 +137,10 @@ export default {
   cursor: pointer;
 }
 
+.todo-add__close:active {
+  transform: scale(.9);
+}
+
 .todo-add__title {
   position: absolute;
   font-size: 22px;
@@ -139,7 +161,7 @@ export default {
 }
 
 .todo-add__input:focus {
-  background-color: rgba(21, 97, 109, .1);
+  background-color: rgba(21, 97, 109, 0.1);
   outline: 0;
   transition: 200ms;
 }

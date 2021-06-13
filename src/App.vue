@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-bind:class="{ 'dark-theme': darkTheme }">
+  <div id="app" v-bind:class="{ 'dark-theme': $store.state.darkTheme == '1' }">
     <header class="header">
       <div class="header__logo-block">
         <figure class="header__logo">
@@ -22,10 +22,8 @@
       <h1 class="header__text">Task Manager</h1>
       <div class="header__switch-block">
         <span>Тёмная тема</span>
-        <div @click="darkTheme = !darkTheme" class="header__switch-wrap">
-          <div
-            class="header__theme-switch"
-          ></div>
+        <div @click="changeTheme()" class="header__switch-wrap">
+          <div class="header__theme-switch"></div>
         </div>
       </div>
     </header>
@@ -38,6 +36,7 @@
       <AddTodo
         :todos="todos"
         :showModal="showModal"
+        :modalOpening="modalOpening"
         v-if="showModal"
         @close="showModal = false"
         ref="modal"
@@ -53,24 +52,30 @@
 <script>
 import TodoList from "@/components/TodoList";
 import AddTodo from "@/components/AddTodo";
+import store from "./store";
 
 export default {
   name: "App",
+  store: store,
   data() {
     return {
       todos: [],
       showModal: false,
-      darkTheme: false,
+      modalOpening: false,
     };
   },
   methods: {
     openModal() {
       this.showModal = true;
+      this.modalOpening = false;
 
-      this.$nextTick(() => {
-        this.$refs.modal.focus();
-      });
+      setTimeout(() => {
+        this.modalOpening = true;
+      }, 1);
     },
+    changeTheme() {
+      this.$store.commit('changeTheme')
+    }
   },
   components: { TodoList, AddTodo },
 };
@@ -99,11 +104,6 @@ export default {
   background-color: #fefefe;
   filter: invert(95%);
   transition: 200ms;
-
-  * {
-    background-color: inherit;
-    transition: 200ms;
-  }
 }
 
 * {
@@ -113,11 +113,6 @@ export default {
 body {
   background-color: #e8e8e8;
   font-family: "Roboto", sans-serif;
-  background-image: url("./assets/polytech_logo.png");
-  background-repeat: no-repeat;
-  background-size: 60%;
-  background-position: right;
-  background-position-y: 30vh;
 }
 
 #app {
@@ -196,7 +191,7 @@ body {
 }
 
 .header__switch-wrap:active {
-  transform: scale(.9);
+  transform: scale(0.9);
 }
 
 .header__theme-switch {
