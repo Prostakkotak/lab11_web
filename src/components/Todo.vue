@@ -1,8 +1,25 @@
 <template>
   <li class="todo-list__item">
     <p class="todo-list__name">
-      {{ todo.name }} | id: {{ todo.id }} | Status: {{ todo.status }}
+      Задача №{{ todo.id }}
+      <span
+        v-bind:class="{
+          'todo-list__priority': true,
+          'todo-list__priority_1': todo.priority === '1',
+          'todo-list__priority_2': todo.priority === '2',
+          'todo-list__priority_3': todo.priority === '3',
+        }"
+        >{{ todo.priority }}</span
+      >
     </p>
+
+    <div class="todo-list__description">
+      {{ todo.name }}
+    </div>
+
+    <div class="todo-list__date">
+      <span>Создано:</span> {{ todo.creationDate }}
+    </div>
 
     <div class="todo-list__buttons-block">
       <button
@@ -31,7 +48,17 @@ export default {
       let timeElapsed = Date.now();
       let today = new Date(timeElapsed);
 
-      this.todo.date = today.toLocaleDateString();
+      let options = {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        timezone: "UTC",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      };
+
+      this.todo.date = today.toLocaleDateString("ru", options);
 
       this.todosInProgress.push(this.todo);
       this.onRemove();
@@ -51,82 +78,4 @@ export default {
 </script>
 
 <style>
-.todo-list__item {
-  position: relative;
-  display: block;
-  box-sizing: border-box;
-  margin: 20px auto;
-  padding: 20px 5px;
-  padding-bottom: 80px;
-  border-radius: 4px;
-  background-color: #fff;
-  max-width: 300px;
-  min-height: 250px;
-  text-align: center;
-  font-size: 18px;
-  box-shadow: 0px 0px 8px 0px rgba(34, 60, 80, 0.2);
-}
-
-.todo-list__name {
-  max-width: 100%;
-  word-wrap: break-word;
-}
-
-.todo-list__employee {
-  margin: 10px 0;
-}
-
-.todo-list__employee > span {
-  font-weight: 700;
-}
-
-.todo-list__date {
-    margin: 10px 0;
-}
-
-.todo-list__date span {
-    font-weight: 700;
-}
-
-.todo-list__buttons-block {
-  position: absolute;
-  bottom: 0;
-  left: 5px;
-  width: calc(100% - 10px);
-}
-
-.todo-list__button {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 5px;
-  border-radius: 4px;
-  border: 0;
-  margin: 5px 0;
-  color: #fff;
-  text-transform: uppercase;
-  transition: 200ms;
-  cursor: pointer;
-}
-
-.todo-list__button:focus {
-  outline: 0;
-}
-
-.todo-list__button:active {
-  transform: translate(0, 1px);
-  box-shadow: 0px 7px 14px 0px rgba(34, 60, 80, 0.2);
-}
-
-.todo-list__button:hover {
-  background-color: #30475e;
-  transition: 200ms;
-}
-
-.todo-list__button_promote {
-  background-color: var(--main-color-1);
-}
-.todo-list__button_remove {
-  background-color: #222831;
-}
 </style>

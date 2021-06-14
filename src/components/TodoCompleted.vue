@@ -1,12 +1,27 @@
 <template>
   <li class="todo-list__item">
     <p class="todo-list__name">
-      {{ todo.name }} | id: {{ todo.id }} | Status: {{ todo.status }}
+      Задача №{{ todo.id }}
+      <span
+        v-bind:class="{
+          'todo-list__priority': true,
+          'todo-list__priority_1': todo.priority === '1',
+          'todo-list__priority_2': todo.priority === '2',
+          'todo-list__priority_3': todo.priority === '3',
+        }"
+        >{{ todo.priority }}</span
+      >
     </p>
 
-    <p class="todo-list__date"><span>Начато:</span> {{todo.date}}</p>
-    <p class="todo-list__date"><span>Закончено:</span> {{todo.dateEnd}}</p>
-    <p class="todo-list__employee"><span>Ответственный:</span> Вася</p>
+    <div class="todo-list__description">
+      {{ todo.name }}
+    </div>
+
+    <div>
+      <p class="todo-list__date"><span>Начато:</span> {{ todo.date }}</p>
+      <p class="todo-list__date"><span>Закончено:</span> {{ todo.dateEnd }}</p>
+      <div class="todo-list__date"><span>Создано:</span> {{ todo.creationDate }}</div>
+    </div>
 
     <div class="todo-list__buttons-block">
       <button

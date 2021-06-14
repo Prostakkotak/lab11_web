@@ -1,10 +1,30 @@
 <template>
   <li class="todo-list__item">
-    <p class="todo-list__name">
-      {{ todo.name }} | id: {{ todo.id }} | Status: {{ todo.status }}
-    </p>
-    <p class="todo-list__date"><span>Начато:</span> {{todo.date}}</p>
-    <p class="todo-list__employee"><span>Ответственный:</span> Вася</p>
+    <div class="todo-list__name">
+      Задача №{{ todo.id }}
+      <div class="todo-list__icons-wrap">
+        <span @click="$store.dispatch('openModal', 'changeTodo')" class="todo-list__change-todo">
+        <img src="../assets/pencil.svg" alt="">
+      </span>
+      <span
+        v-bind:class="{
+          'todo-list__priority': true,
+          'todo-list__priority_1': todo.priority === '1',
+          'todo-list__priority_2': todo.priority === '2',
+          'todo-list__priority_3': todo.priority === '3',
+        }"
+        >{{ todo.priority }}</span>
+      </div>
+    </div>
+
+    <div class="todo-list__description">
+      {{ todo.name }}
+    </div>
+
+    <div>
+      <p class="todo-list__date"><span>Начато:</span> {{ todo.date }}</p>
+      <div class="todo-list__date"><span>Создано:</span> {{ todo.creationDate }}</div>
+    </div>
 
     <div class="todo-list__buttons-block">
       <button
@@ -41,7 +61,17 @@ export default {
       let timeElapsed = Date.now();
       let today = new Date(timeElapsed);
 
-      this.todo.dateEnd = today.toLocaleDateString();
+      let options = {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        timezone: "UTC",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      };
+
+      this.todo.dateEnd = today.toLocaleDateString("ru", options);
 
       this.todosCompleted.push(this.todo);
       this.onRemove();

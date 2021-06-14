@@ -8,6 +8,9 @@ const store = new Vuex.Store({
         darkTheme: localStorage.darkTheme || '0',
         todosCounter: 0,
         todos: [],
+        modalOpening: false,
+        showModal: false,
+        modalOpeningMode: '',
     },
     getters: {
         darkTheme(state) {
@@ -18,6 +21,15 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
+        modalOpeningModeChange(state, mode) {
+            state.modalOpeningMode = mode;
+        },
+        modalOpeningSwitch(state, bool) {
+            state.modalOpening = bool;
+        },
+        showModalSwitch(state, bool) {
+            state.showModal = bool;
+        },
         changeTheme(state) {
 
             /* Здесь такая кривая конструкция поскольку 
@@ -33,6 +45,23 @@ const store = new Vuex.Store({
         },
         increaseTodosCounter(state) {
             state.todosCounter++;
+        }
+    },
+    actions: {
+        openModal(state, mode) {
+            state.commit('showModalSwitch', true);
+            state.commit('modalOpeningSwitch', false);
+            state.commit('modalOpeningModeChange', mode);
+
+            setTimeout(() => {
+                state.commit('modalOpeningSwitch', true);
+            }, 1);
+        },
+        closeModal(state) {
+            state.commit('modalOpeningSwitch', false);
+            setTimeout(() => {
+                state.commit('showModalSwitch', false);
+            }, 200);
         }
     }
 });
