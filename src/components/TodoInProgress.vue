@@ -3,7 +3,7 @@
     <div class="todo-list__name">
       Задача №{{ todo.id }}
       <div class="todo-list__icons-wrap">
-        <span @click="$store.dispatch('openModal', 'changeTodo')" class="todo-list__change-todo">
+        <span @click="$store.dispatch('openModal', {mode: 'changeTodo', id: todo.id})" class="todo-list__change-todo">
         <img src="../assets/pencil.svg" alt="">
       </span>
       <span
@@ -34,7 +34,7 @@
         Завершить
       </button>
       <button
-        v-on:click="onRemove"
+        v-on:click="$store.commit('removeTodo', todo.id)"
         class="todo-list__button todo-list__button_remove"
       >
         Удалить
@@ -45,7 +45,7 @@
 
 <script>
 export default {
-  props: ["todo", "todosInProgress", "todosCompleted"],
+  props: ["todo"],
   methods: {
     onRemove: function () {
       for (let i = 0; i < this.todosInProgress.length; i++) {
@@ -72,11 +72,6 @@ export default {
       };
 
       this.todo.dateEnd = today.toLocaleDateString("ru", options);
-
-      this.todosCompleted.push(this.todo);
-      this.onRemove();
-
-      console.log(this.todosCompleted);
     },
   },
 };

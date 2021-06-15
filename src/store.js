@@ -8,6 +8,7 @@ const store = new Vuex.Store({
         darkTheme: localStorage.darkTheme || '0',
         todosCounter: 0,
         todos: [],
+        id: '',
         modalOpening: false,
         showModal: false,
         modalOpeningMode: '',
@@ -21,6 +22,32 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
+        idChange(state, id) {
+            state.id = id;
+        },
+        addTodo(state, newTodo) {
+            state.todos.push(newTodo);
+        },
+        removeTodo(state, id) {
+            for (let i = 0; i < state.todos.length; i++) {
+                if (state.todos[i].id == id) {
+                    state.todos.splice(i, 1);
+                    break;
+                }
+            }
+        },
+        changeTodo(state, obj) {
+
+            for (let i = 0; i < state.todos.length; i++) {
+
+                if (state.todos[i].id == obj.id) {
+                    state.todos[i].name = obj.name;
+                    state.todos[i].priority = obj.priority;
+                    state.todos[i].status = obj.status;
+                    break;
+                }
+            }
+        },
         modalOpeningModeChange(state, mode) {
             state.modalOpeningMode = mode;
         },
@@ -48,10 +75,11 @@ const store = new Vuex.Store({
         }
     },
     actions: {
-        openModal(state, mode) {
+        openModal(state, obj) {
             state.commit('showModalSwitch', true);
             state.commit('modalOpeningSwitch', false);
-            state.commit('modalOpeningModeChange', mode);
+            state.commit('modalOpeningModeChange', obj.mode);
+            state.commit('idChange', obj.id);
 
             setTimeout(() => {
                 state.commit('modalOpeningSwitch', true);

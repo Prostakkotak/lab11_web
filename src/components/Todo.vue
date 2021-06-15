@@ -1,7 +1,12 @@
 <template>
   <li class="todo-list__item">
-    <p class="todo-list__name">
+    <div class="todo-list__name">
       Задача №{{ todo.id }}
+      
+      <div class="todo-list__icons-wrap">
+        <span @click="$store.dispatch('openModal', {mode: 'changeTodo', id: todo.id})" class="todo-list__change-todo">
+        <img src="../assets/pencil.svg" alt="">
+      </span>
       <span
         v-bind:class="{
           'todo-list__priority': true,
@@ -9,9 +14,9 @@
           'todo-list__priority_2': todo.priority === '2',
           'todo-list__priority_3': todo.priority === '3',
         }"
-        >{{ todo.priority }}</span
-      >
-    </p>
+        >{{ todo.priority }}</span>
+      </div>
+    </div>
 
     <div class="todo-list__description">
       {{ todo.name }}
@@ -29,7 +34,7 @@
         В работу
       </button>
       <button
-        v-on:click="onRemove"
+        v-on:click="$store.commit('removeTodo', todo.id)"
         class="todo-list__button todo-list__button_remove"
       >
         Удалить
@@ -40,7 +45,7 @@
 
 <script>
 export default {
-  props: ["todo", "todosInProgress", "todos", "todosCompleted"],
+  props: ["todo"],
   methods: {
     onPromote: function () {
       this.todo.status = "inProgress";
@@ -59,19 +64,6 @@ export default {
       };
 
       this.todo.date = today.toLocaleDateString("ru", options);
-
-      this.todosInProgress.push(this.todo);
-      this.onRemove();
-
-      console.log(this.todosInProgress);
-    },
-    onRemove: function () {
-      for (let i = 0; i < this.todos.length; i++) {
-        if (this.todos[i].id == this.todo.id) {
-          this.todos.splice(i, 1);
-          break;
-        }
-      }
     },
   },
 };

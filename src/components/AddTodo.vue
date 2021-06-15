@@ -26,7 +26,6 @@
 
 <script>
 export default {
-  props: ['todos'],
   methods: {
     onSubmit() {
       if (this.name.trim() && this.priority.trim()) {
@@ -54,7 +53,7 @@ export default {
 
         newTodo.creationDate = today.toLocaleDateString('ru', options)
 
-        this.todos.push(newTodo);
+        this.$store.commit('addTodo', newTodo)
         this.name = "";
         this.$store.commit('modalOpeningSwitch', false)
         setTimeout(() => {

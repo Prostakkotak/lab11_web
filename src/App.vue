@@ -16,22 +16,21 @@
     </header>
     <main class="main">
       <div class="modal-open-button__wrap">
-        <button id="openModal" class="modal-open-button" @click="$store.dispatch('openModal', 'createTodo')">
+        <button id="openModal" class="modal-open-button" @click="$store.dispatch('openModal', {mode: 'createTodo', id: '0'})">
           Создать задачу
         </button>
       </div>
       
       <Modal
-        :todos="todos"
         :mode="$store.state.modalOpeningMode"
         v-if="$store.state.showModal"
         @close="$store.state.showModal = false"
         ref="modal"
       />
-      <TodoList v-bind:todos="todos" />
+      <TodoList />
     </main>
     <footer class="footer">
-      Васьковский Сергей Павлович, 201-322, 01.02.2021
+      Васьковский Сергей Павлович, 201-322
     </footer>
   </div>
 </template>
@@ -44,11 +43,6 @@ import store from "./store";
 export default {
   name: "App",
   store: store,
-  data() {
-    return {
-      todos: [],
-    };
-  },
   methods: {
     changeTheme() {
       this.$store.commit('changeTheme')
@@ -226,6 +220,7 @@ body {
   padding-left: calc((100% - 1700px) / 2);
   background-color: #222831;
   color: #fff;
+  text-align: center;
 }
 
 .todo-list {
@@ -338,7 +333,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 50px 100px;
+  padding: 70px 100px 50px 100px;
   font-size: 19px;
   border-radius: 5px;
   background-color: #ffffff;
@@ -378,7 +373,7 @@ body {
 }
 
 .modal__input {
-  margin: 25px 0;
+  margin: 5px 0 25px 0;
   border: 0;
   border-bottom: 1px solid black;
   box-sizing: border-box;

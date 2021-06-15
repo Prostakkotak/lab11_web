@@ -5,8 +5,8 @@
     @keyup.esc="$store.dispatch('closeModal')"
     @click.self="$store.dispatch('closeModal')"
   >
-    <AddTodo :todos="todos" v-if="mode === 'createTodo'" />
-    <ChangeTodo v-else-if="mode === 'changeTodo'" />
+    <AddTodo v-if="mode === 'createTodo'" />
+    <ChangeTodo v-else-if="mode === 'changeTodo'" :id="$store.state.id" />
   </section>
 </template>
 
@@ -15,7 +15,7 @@ import AddTodo from './AddTodo.vue';
 import ChangeTodo from './ChangeTodo.vue';
 
 export default {
-  props: ["todos", "mode", "id", "todoStatus"],
+  props: ["mode", "id"],
   methods: {
     onSubmit() {
       if (this.name.trim()) {
@@ -43,7 +43,7 @@ export default {
 
         newTodo.creationDate = today.toLocaleDateString('ru', options)
 
-        this.todos.push(newTodo);
+        this.$store.commit('addTodo', newTodo)
         this.name = "";
         this.$store.commit('modalOpeningSwitch', false)
         setTimeout(() => {
